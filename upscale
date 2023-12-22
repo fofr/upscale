@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 __version__ = "0.0.1"
 
 import os
@@ -65,7 +67,7 @@ def main(
 
     print("View your running predictions at: https://replicate.com/predictions")
     print(f"Output will be saved to {output_file_path}")
-    print(f"Upscaling {image_path} to {resolution}...")
+    print(f"Upscaling {image_path} to {resolution} (30 to 60 seconds)...")
     output = upscale(
         image_path,
         steps,

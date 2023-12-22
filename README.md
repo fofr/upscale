@@ -20,18 +20,36 @@ A local image upscaler using Replicate. Upscale images using a high-resolution c
    pip install -r requirements.txt
    ```
 
-2. Run the script `main.py` with the required arguments. Here is an example:
+2. Make the script `upscale` executable:
 
    ```sh
-   python main.py path_to_your_image.png
+   chmod u+x upscale
+   ```
+
+3. You can run the script directly using the following command:
+
+   ```sh
+   ./upscale path_to_your_image.png
    ```
 
    This will upscale the image at the specified path using the default parameters.
 
+4. Optionally, you can add the script to your PATH to run it from anywhere. To make this change persistent across sessions, add the export command to your shell's configuration file (e.g., `~/.bashrc` or `~/.bash_profile` for bash, `~/.zshrc` for zsh):
+
+   ```sh
+   echo 'export PATH=$PATH:/path/to/script/directory' >> ~/.bashrc
+   ```
+
+   Then, source your shell's configuration file to apply the change immediately:
+
+   ```sh
+   source ~/.bashrc
+   ```
+
 You can also specify additional parameters such as `steps`, `strength`, `scheduler`, `guess_mode`, `resolution`, `guidance_scale`, `condition_scale`, `negative_prompt`, and `prompt`. For example:
 
 ```sh
-python main.py path_to_your_image.png --steps 30 --strength 0.5
+./upscale path_to_your_image.png --steps 30 --strength 0.5
 ```
 
 This will upscale the image with 30 steps and a strength of 0.5.
