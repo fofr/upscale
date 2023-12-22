@@ -4,6 +4,10 @@ A local image upscaler using Replicate. Upscale images using a high-resolution c
 
 [https://replicate.com/batouresearch/high-resolution-controlnet-tile](replicate.com/batouresearch/high-resolution-controlnet-tile)
 
+https://github.com/fofr/upscale/assets/319055/211d9a63-c411-4da2-a7d9-1fbf90ad7e5f
+
+
+
 ## Prerequisites
 
 1. Make a [Replicate](https://replicate.com) account and set [your token](https://replicate.com/account/api-tokens):
