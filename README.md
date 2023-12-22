@@ -23,7 +23,7 @@ A local image upscaler using Replicate. Upscale images using a high-resolution c
 2. Run the script `main.py` with the required arguments. Here is an example:
 
    ```sh
-   python main.py --image_path "path_to_your_image.png"
+   python main.py path_to_your_image.png
    ```
 
    This will upscale the image at the specified path using the default parameters.
@@ -31,27 +31,25 @@ A local image upscaler using Replicate. Upscale images using a high-resolution c
 You can also specify additional parameters such as `steps`, `strength`, `scheduler`, `guess_mode`, `resolution`, `guidance_scale`, `condition_scale`, `negative_prompt`, and `prompt`. For example:
 
 ```sh
-python main.py --image_path "path_to_your_image.png" --steps 100 --strength 0.5
+python main.py path_to_your_image.png --steps 30 --strength 0.5
 ```
 
-This will upscale the image with 100 steps and a strength of 0.5.
+This will upscale the image with 30 steps and a strength of 0.5.
 
 The upscaled image will be saved in the same directory as the original image with `-upscaled` appended to the original file name.
 
 ## Options
 
-Here is a table documenting all the options:
-
 Option|Type|Default|Description|
 ---|---|---|---|
 `image_path`|str|None|The path to the image to upscale|
-`steps`|int|60|The number of steps to perform|
-`strength`|float|0.45|The strength of the upscale|
-`scheduler`|str|"K_EULER"|The scheduler to use|
-`guess_mode`|bool|True|Whether to use guess mode or not|
-`resolution`|int|2048|The resolution of the upscaled image|
-`guidance_scale`|int|4|The guidance scale|
-`condition_scale`|int|1|The condition scale|
-`negative_prompt`|str|"ugly, broken, deformed, distorted"|The negative prompt|
-`prompt`|str|" "|The prompt|
-`output_file_path`|str|None|The path where the upscaled image will be saved. If not specified, the upscaled image will be saved in the same directory as the original image with `-upscaled` appended to the original file name.|
+`steps`|int|60|Number of inference steps|
+`strength`|float|0.45|Denoising strength. 1 means total destruction of the original image|
+`scheduler`|str|"K_EULER"|Scheduler type. Choices: "DDIM", "DPMSolverMultistep", "K_EULER_ANCESTRAL", "K_EULER"|
+`guess_mode`|bool|True|In this mode, the ControlNet encoder will try best to recognize the content of the input image even if you remove all prompts. The `guidance_scale` between 3.0 and 5.0 is recommended|
+`resolution`|int|2048|Resolution. Choices: 2048, 2560, 3072, 4096|
+`guidance_scale`|int|4|Scale for classifier-free guidance|
+`condition_scale`|int|1|Conditioning scale for controlnet|
+`negative_prompt`|str|"ugly, broken, deformed, distorted"|Negative prompt for the upscaling process|
+`prompt`|str|" "|Describe the image to improve upscale, can increase hallucination|
+`output_file_path`|str|None|The path where the upscaled image will be saved. If not specified, the upscaled image will be saved in the same directory as the original image with `-upscaled` appended to the original file name|

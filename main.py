@@ -1,6 +1,7 @@
-__version__ = '0.0.1'
+__version__ = "0.0.1"
 
 import os
+import sys
 import time
 import replicate
 import argparse
@@ -62,7 +63,9 @@ def main(
         print(f"Skipping {image_path} as upscaled version already exists")
         return
 
-    print(f"Running upscale on {image_path}...")
+    print("View your running predictions at: https://replicate.com/predictions")
+    print(f"Output will be saved to {output_file_path}")
+    print(f"Upscaling {image_path} to {resolution}...")
     output = upscale(
         image_path,
         steps,
@@ -76,30 +79,79 @@ def main(
         prompt,
     )
 
-    urlretrieve(output, output_file_path)
-    print(f"Upscaled {image_path} in {time.time() - start_time} seconds")
+    urlretrieve(output[0], output_file_path)
+    print(f"Upscaled in {time.time() - start_time:.2f} seconds")
+    print(f"Saved to {output_file_path}")
 
 
 if __name__ == "__main__":
-    if 'REPLICATE_API_TOKEN' not in os.environ:
-        print("Warning: REPLICATE_API_TOKEN environment variable is not set.")
+    if "REPLICATE_API_TOKEN" not in os.environ:
+        print("Error: REPLICATE_API_TOKEN environment variable is not set.")
+        print(
+            "Get your API token from https://replicate.com/account/api-tokens and run:"
+        )
+        print("export REPLICATE_API_TOKEN=<token>")
+        sys.exit(1)
 
     parser = argparse.ArgumentParser(description="Upscale an image.")
     parser.add_argument(
         "image_path", type=str, help="The path to the image to upscale."
     )
-    parser.add_argument("--steps", type=int, default=60)
-    parser.add_argument("--strength", type=float, default=0.45)
-    parser.add_argument("--scheduler", type=str, default="K_EULER")
-    parser.add_argument("--guess_mode", type=bool, default=True)
-    parser.add_argument("--resolution", type=int, default=2048)
-    parser.add_argument("--guidance_scale", type=int, default=4)
-    parser.add_argument("--condition_scale", type=int, default=1)
     parser.add_argument(
-        "--negative_prompt", type=str, default="ugly, broken, deformed, distorted"
+        "--steps", type=int, default=60, help="Number of inference steps"
     )
-    parser.add_argument("--prompt", type=str, default=" ")
-    parser.add_argument("--output_file_path", type=str, default=None)
+    parser.add_argument(
+        "--strength",
+        type=float,
+        default=0.45,
+        help="Denoising strength. 1 means total destruction of the original image.",
+    )
+    parser.add_argument(
+        "--scheduler",
+        type=str,
+        choices=["DDIM", "DPMSolverMultistep", "K_EULER_ANCESTRAL", "K_EULER"],
+        default="K_EULER",
+        help="Scheduler type",
+    )
+    parser.add_argument(
+        "--guess_mode",
+        type=bool,
+        default=True,
+        help="In this mode, the ControlNet encoder will try best to recognize the content of the input image even if you remove all prompts. The `guidance_scale` between 3.0 and 5.0 is recommended.",
+    )
+    parser.add_argument(
+        "--resolution",
+        type=int,
+        choices=[2048, 2560, 3072, 4096],
+        default=2048,
+        help="Resolution",
+    )
+    parser.add_argument(
+        "--guidance_scale",
+        type=int,
+        default=4,
+        help="Scale for classifier-free guidance",
+    )
+    parser.add_argument(
+        "--condition_scale",
+        type=int,
+        default=1,
+        help="Conditioning scale for controlnet",
+    )
+    parser.add_argument(
+        "--negative_prompt",
+        type=str,
+        default="ugly, broken, deformed, distorted",
+        help="Negative prompt for the upscaling process.",
+    )
+    parser.add_argument(
+        "--prompt", type=str, default=" ", help="Describe the image to improve upscale, can increase hallucination."
+    )
+    parser.add_argument(
+        "--output_file_path",
+        type=str,
+        default=None,
+    )
     args = parser.parse_args()
     main(
         args.image_path,
